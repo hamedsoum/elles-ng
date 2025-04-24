@@ -4,10 +4,9 @@ import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Button],
+  imports: [Button],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'elles';
 }
