@@ -5,7 +5,6 @@ import {Select} from 'primeng/select';
 import {NgClass, NgIf} from '@angular/common';
 import {EDOIsNotEmptyPipe} from '../../../pipes/edo.pipe';
 import {FloatLabel} from 'primeng/floatlabel';
-import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: "input-select",

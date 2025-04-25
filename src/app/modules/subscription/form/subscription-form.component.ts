@@ -14,11 +14,12 @@ import {
   InputMultipleSelectComponent
 } from '../../../shared/components/input/multiple-select/input-multiple-select.component';
 import {VehicleCategory} from '../../../core/domain/vehicle';
-import {FloatLabel} from 'primeng/floatlabel';
+import { StepperModule } from 'primeng/stepper';
+import {Button} from 'primeng/button';
 
 @Component({
-  selector: 'product-form',
-  templateUrl: './product-form.component.html',
+  selector: 'subscription-form',
+  templateUrl: './subscription-form.component.html',
 
   imports: [
     TableModule,
@@ -28,12 +29,12 @@ import {FloatLabel} from 'primeng/floatlabel';
     ProgressSpinner,
     NgIf,
     SelectModule,
-    InputTextComponent,
+    StepperModule,
     MultiSelectModule,
-    InputMultipleSelectComponent
+    Button,
   ]
 })
-export class ProductFormComponent implements OnInit {
+export class SubscriptionFormComponent implements OnInit {
 
   loading?: boolean;
 
