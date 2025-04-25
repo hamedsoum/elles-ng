@@ -5,34 +5,34 @@ import {Select} from 'primeng/select';
 import {NgClass, NgIf} from '@angular/common';
 import {EDOIsNotEmptyPipe} from '../../../pipes/edo.pipe';
 import {FloatLabel} from 'primeng/floatlabel';
-import { MultiSelectModule } from 'primeng/multiselect';
+import {MultiSelect} from 'primeng/multiselect';
 
 @Component({
-  selector: "input-select",
-  templateUrl: "./input-select.component.html",
+  selector: "input-multiple-select",
+  templateUrl: "./input-multiple-select.component.html",
   imports: [
     FormsModule,
-    Select,
     EDOIsNotEmptyPipe,
     NgClass,
     NgIf,
     FloatLabel,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MultiSelect
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputSelectComponent),
+      useExisting: forwardRef(() => InputMultipleSelectComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => InputSelectComponent),
+      useExisting: forwardRef(() => InputMultipleSelectComponent),
       multi: true
     }
   ]
 })
-export class InputSelectComponent extends InputComponent<any[]> implements OnInit {
+export class InputMultipleSelectComponent extends InputComponent<any[]> implements OnInit {
 
   @Input() items?: any[];
 

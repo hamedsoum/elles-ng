@@ -5,7 +5,7 @@ import {TableModule} from 'primeng/table';
 import {finalize} from 'rxjs';
 import {NgIf} from '@angular/common';
 import {Dialog} from 'primeng/dialog';
-import {UsersFormComponent} from './form/users-form.component';
+import {UserFormComponent} from './form/user-form.component';
 
 @Component({
   selector: 'users',
@@ -15,7 +15,7 @@ import {UsersFormComponent} from './form/users-form.component';
     TableModule,
     NgIf,
     Dialog,
-    UsersFormComponent
+    UserFormComponent
   ]
 })
 export class UsersComponent implements OnInit {

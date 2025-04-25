@@ -1,1 +1,55 @@
-<div>Products Component</div>
+<div>
+  <div>
+    <span class="block text-blue-500 ">Liste des produits d'assurances</span>
+  </div>
+
+  <div class="flex justify-end my-10">
+    <span (click)="formVisible = true" class="block px-5 py-2 bg-blue-500 text-white rounded-sm cursor-pointer">Nouveau produit</span>
+  </div>
+  <p-table
+    *ngIf="products"
+    [loading]="loading"
+    [value]="products!"
+    [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #header>
+      <tr>
+        <th>Nom</th>
+        <th>Garanties</th>
+        <th>Vehicules elligibles</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-product>
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>
+          <span class="mr-2" *ngFor="let warranty of product.warranties">{{warranty}}</span>
+        </td>
+        <td>
+          <span class="mr-2" *ngFor="let vehicle of product.eligibleVehicles">{{vehicle}}</span>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <td colspan="4">
+        <div class="h-[20rem] flex flex-row justify-center items-center">
+          <span>Aucun produit trouvé !</span>
+        </div>
+      </td>
+    </ng-template>
+
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="formVisible"
+  [modal]="true"
+  [style]="{ width: '50rem', height: '25rem' }"
+  header="Nouveau produit">
+  <ng-template pTemplate="content">
+    <product-form
+      (cancelEvent)="formVisible = false"
+      (saveEvent)="handleSaveEvent()"
+    >
+    </product-form>
+  </ng-template>
+</p-dialog>

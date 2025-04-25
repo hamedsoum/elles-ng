@@ -4,3 +4,13 @@ export interface Product {
   warranties: string[],
   eligibleVehicles: string[]
 }
+
+export enum Warranty {
+    RC = "RC",
+    DOMMAGE = "DOMMAGE",
+    VOL = "VOL",
+    TIERCE_COLLISION = "TIERCE COLLISION",
+    COLLISION = "COLLISION",
+    INCENDIE = "INCENDIE",
+    "All" = "All",
+}

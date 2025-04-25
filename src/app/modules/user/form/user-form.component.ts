@@ -5,7 +5,6 @@ import {NgClass, NgIf} from '@angular/common';
 import {UserService} from '../../../shared/services/user.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Role, User} from '../../../core/domain/user';
-import {FloatLabel} from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import {ProgressSpinner} from 'primeng/progressspinner';
 import { SelectModule } from 'primeng/select';
@@ -28,7 +27,7 @@ import {InputSelectComponent} from '../../../shared/components/input/select/inpu
     InputSelectComponent
   ]
 })
-export class UsersFormComponent implements OnInit {
+export class UserFormComponent implements OnInit {
 
   loading?: boolean;
 
