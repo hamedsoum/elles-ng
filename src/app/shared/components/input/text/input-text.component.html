@@ -1,0 +1,19 @@
+<div [ngClass]="{'disabled': disabled}" class="w-full {{styleClass}}">
+  <p-floatlabel>
+    <input
+      (blur)="markAsTouched()"
+      (ngModelChange)="onInput($event)"
+      [(ngModel)]="value"
+      [disabled]="disabled"
+      [placeholder]=" (placeholder | edoIsNotEmpty) ? placeholder! : ''"
+      [type]="type"
+      class="w-full {{inputStyleClass}}"
+      pInputText/>
+    <label >{{ label }}</label>
+  </p-floatlabel>
+
+  <div class="flex-row height10">
+    <span *ngIf="errorMessage | edoIsNotEmpty" class="input-field-error-message"> {{ errorMessage }} </span>
+  </div>
+</div>
+

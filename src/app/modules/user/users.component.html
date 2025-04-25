@@ -41,13 +41,13 @@
 <p-dialog
   [(visible)]="formVisible"
   [modal]="true"
-  [style]="{ width: '50rem', height: '28rem' }"
+  [style]="{ width: '50rem', height: '32rem' }"
   header="Nouvel Utilisateur">
   <ng-template pTemplate="content">
     <user-form
+      (cancelEvent)="formVisible = false"
       (saveEvent)="handleSaveEvent()"
     >
-
     </user-form>
     </ng-template>
 </p-dialog>

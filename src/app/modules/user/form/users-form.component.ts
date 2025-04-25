@@ -3,12 +3,14 @@ import {TableModule} from 'primeng/table';
 import {finalize} from 'rxjs';
 import {NgClass, NgIf} from '@angular/common';
 import {UserService} from '../../../shared/services/user.service';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Role, User} from '../../../core/domain/user';
 import {FloatLabel} from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import {ProgressSpinner} from 'primeng/progressspinner';
 import { SelectModule } from 'primeng/select';
+import {InputTextComponent} from '../../../shared/components/input/text/input-text.component';
+import {InputSelectComponent} from '../../../shared/components/input/select/input-select.component';
 
 @Component({
   selector: 'user-form',
@@ -16,13 +18,14 @@ import { SelectModule } from 'primeng/select';
 
   imports: [
     TableModule,
-    FloatLabel,
     InputTextModule,
     NgClass,
     ReactiveFormsModule,
     ProgressSpinner,
     NgIf,
-    SelectModule
+    SelectModule,
+    InputTextComponent,
+    InputSelectComponent
   ]
 })
 export class UsersFormComponent implements OnInit {
@@ -37,6 +40,8 @@ export class UsersFormComponent implements OnInit {
     { value: Role.ADMIN, label: 'Admin' },
     { value: Role.SUBSCRIBER, label: 'Souscripteur' },
   ]
+
+  @Output() cancelEvent = new EventEmitter();
   @Output() saveEvent = new EventEmitter<User>();
 
   constructor(
@@ -50,34 +55,37 @@ export class UsersFormComponent implements OnInit {
   }
 
   public save(): void {
-    this.loading = true;
-    let formData = this.formGroup.value;
-    formData = {
-      ...formData,
-      role: formData.role.value,
+    this.formGroup.markAllAsTouched();
+    if (this.formGroup.valid) {
+      this.loading = true;
+      let formData = this.formGroup.value;
+      formData = {
+        ...formData,
+        role: formData.role.value,
+      }
+      console.log("formData", formData);
+      this.userService.save(formData)
+        .pipe(finalize(() => this.loading = false))
+        .subscribe(
+          {
+            next: userSaved => {
+              this.formGroup.reset();
+              this.saveEvent.emit(userSaved);
+            },
+            error: error => this.error = error
+          }
+        )
     }
-    console.log("formData", formData);
-    this.userService.save(formData)
-      .pipe(finalize(() => this.loading = false))
-      .subscribe(
-        {
-          next: userSaved => {
-            this.formGroup.reset();
-            this.saveEvent.emit(userSaved);
-          },
-          error: error => this.error = error
-        }
-      )
   }
 
   private buildFields(): void {
     this.formGroup = this.formBuilder.group({
-      firstName: [],
-      lastName: [],
-      phoneNumber: [],
-      email: [],
-      role: [],
-      password: []
+      firstName: ['', Validators.required],
+      lastName: ['' , Validators.required],
+      phoneNumber: ['', Validators.required],
+      email: [''],
+      role: ['', Validators.required],
+      password: ['', Validators.required],
     })
   }
 }
