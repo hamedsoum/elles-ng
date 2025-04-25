@@ -17,14 +17,16 @@
         <th>Prenoms</th>
         <th>numéro de téléphone</th>
         <th>Email</th>
-     </tr>
+        <th>Role</th>
+      </tr>
     </ng-template>
     <ng-template #body let-user>
       <tr>
-        <td>{{ user.firstname }}</td>
-        <td>{{ user.lastname }}</td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
         <td>{{ user.phoneNumber }}</td>
         <td>{{ user.email }}</td>
+        <th>{{user.role.libelle}}</th>
       </tr>
     </ng-template>
     <ng-template #emptymessage>

@@ -43,7 +43,6 @@ export class UsersComponent implements OnInit {
         .subscribe(
         (users: User[]) => {
           this.users = users;
-          console.log("Users ===>", this.users);
         },
         error => console.log(error)
       )

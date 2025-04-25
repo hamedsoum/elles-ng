@@ -3,11 +3,11 @@ export interface User {
   lastName: string,
   phoneNumber: string,
   email: string,
-  role: Role,
+  role: {id: string, libelle: string},
   password: string
 }
 
 export enum Role {
   ADMIN = "ADMIN",
-  SUBSCRIBER = "SUBSCRIBER"
+  AMAZON = "AMAZON"
 }

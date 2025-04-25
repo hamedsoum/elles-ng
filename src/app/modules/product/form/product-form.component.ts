@@ -82,7 +82,6 @@ export class ProductFormComponent implements OnInit {
         warranties: formData.warranties.value,
         eligibleVehicles: formData.eligibleVehicles.value
       }
-      console.log("formData", formData);
       this.productService.save(formData)
         .pipe(finalize(() => this.loading = false))
         .subscribe(

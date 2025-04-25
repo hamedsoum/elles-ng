@@ -1,0 +1,15 @@
+.menu{
+  border-right: 1px solid lightgray;
+  .item {
+      border-bottom: 1px solid lightgray;
+  }
+  .item:hover {
+  background: #2b7fff;
+    color: white;
+ }
+  .active {
+    background: #2b7fff;
+    color: white;
+  }
+
+}

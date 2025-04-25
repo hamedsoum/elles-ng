@@ -1,0 +1,44 @@
+<div class="flex-flex-col w-full">
+  <div class="flex flex-row justify-between items-center p-5">
+    <span class="block text-blue-500 text-bold text-2xl">Elles assurance</span>
+    <div class="flex flex-col">
+      <span>Username: {{'admin@admin.ci'}}</span>
+      <span>Mot de passe: Justdoit</span>
+
+    </div>
+  </div>
+    <div class="flex flex-col justify-center items-center mt-20 w-full rounded-xl">
+      <form class="w-2/5 flex-col justify-center border-2 border-gray-200 rounded-xl p-15" [formGroup]="formGroup" [ngClass]="{'disabled': loading}">
+        <span class="block text-blue-500 text-lg">Connexion</span>
+        <span class="block text-gray-500 text-sm">Veuillez renseigner vos informations de connexion.</span>
+        <div class="pt-5 pb-10">
+          <span class="input-field-error-message mb-5" *ngIf="error | edoIsNotEmpty">{{error}}</span>
+        </div>
+        <input-text
+          styleClass="h-20"
+          formControlName="username"
+          label="Email">
+        </input-text>
+        <input-text
+          class="h-30"
+          formControlName="password"
+          label="Mot de passe">
+        </input-text>
+        <div class="flex justify-between mt-10">
+          <div class="flex flex-row items-center">
+            <p-progress-spinner
+              *ngIf="loading"
+              [style]="{ width: '30px', height: '30px'}"
+              aria-label="Loading"
+              fill="transparent"
+              strokeWidth="5">
+            </p-progress-spinner>
+          </div>
+          <div class="flex flex-row">
+            <span (click)="login()" class="block px-5 py-2 bg-blue-500 text-white rounded-sm cursor-pointer">Connexion</span>
+          </div>
+        </div>
+      </form>
+
+    </div>
+</div>

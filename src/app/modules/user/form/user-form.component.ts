@@ -37,14 +37,13 @@ export class UserFormComponent implements OnInit {
 
   roles = [
     { value: Role.ADMIN, label: 'Admin' },
-    { value: Role.SUBSCRIBER, label: 'Souscripteur' },
+    { value: Role.AMAZON, label: 'AMAZON' },
   ]
 
   @Output() cancelEvent = new EventEmitter();
   @Output() saveEvent = new EventEmitter<User>();
 
   constructor(
-
     private userService: UserService,
     private formBuilder: FormBuilder
   ) {}
@@ -62,7 +61,6 @@ export class UserFormComponent implements OnInit {
         ...formData,
         role: formData.role.value,
       }
-      console.log("formData", formData);
       this.userService.save(formData)
         .pipe(finalize(() => this.loading = false))
         .subscribe(

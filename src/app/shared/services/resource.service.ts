@@ -2,8 +2,8 @@ import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {inject} from '@angular/core';
 import {Utils} from '../../core/utils';
-import {HttpClientService} from './httpClient-service';
-import {BaseUseCase} from '../../core/use-case/base-use-case';
+import {HttpClientService} from './http-client-service';
+import {BaseUseCase} from '../../core/use-case/base.use-case';
 
 export abstract class EDOResourceService<D, C> implements BaseUseCase<D, C> {
 
