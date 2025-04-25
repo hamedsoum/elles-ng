@@ -1,0 +1,53 @@
+<div>
+  <div>
+    <span class="block text-blue-500 ">Liste des utilisateurs</span>
+  </div>
+
+  <div class="flex justify-end my-10">
+    <span (click)="formVisible = true" class="block px-5 py-2 bg-blue-500 text-white rounded-sm cursor-pointer">Nouvel utilsateur</span>
+  </div>
+  <p-table
+    *ngIf="users"
+    [loading]="loading"
+    [value]="users!"
+    [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #header>
+      <tr>
+        <th>Nom</th>
+        <th>Prenoms</th>
+        <th>numéro de téléphone</th>
+        <th>Email</th>
+     </tr>
+    </ng-template>
+    <ng-template #body let-user>
+      <tr>
+        <td>{{ user.firstname }}</td>
+        <td>{{ user.lastname }}</td>
+        <td>{{ user.phoneNumber }}</td>
+        <td>{{ user.email }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <td colspan="4">
+        <div class="h-[20rem] flex flex-row justify-center items-center">
+          <span>Aucun utilsateur trouvé !</span>
+        </div>
+      </td>
+    </ng-template>
+
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="formVisible"
+  [modal]="true"
+  [style]="{ width: '50rem', height: '28rem' }"
+  header="Nouvel Utilisateur">
+  <ng-template pTemplate="content">
+    <user-form
+      (saveEvent)="handleSaveEvent()"
+    >
+
+    </user-form>
+    </ng-template>
+</p-dialog>

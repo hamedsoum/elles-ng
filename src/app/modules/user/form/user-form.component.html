@@ -1,0 +1,66 @@
+<form [formGroup]="formGroup" [ngClass]="{'disabled': loading}">
+  <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-4 gap-y-8 py-10">
+    <p-floatlabel>
+      <input
+        class="w-full"
+        pInputText
+             formControlName="firstName"/>
+      <label >Nom</label>
+    </p-floatlabel>
+    <p-floatlabel>
+      <input
+        class="w-full"
+        pInputText
+             formControlName="lastName"/>
+      <label >prénom</label>
+    </p-floatlabel>
+    <p-floatlabel>
+    <input
+      class="w-full"
+      pInputText
+      formControlName="phoneNumber"/>
+    <label >Numéro de téléphone</label>
+  </p-floatlabel>
+    <p-floatlabel>
+    <input
+      class="w-full"
+      pInputText
+      formControlName="email"/>
+    <label >Email</label>
+  </p-floatlabel>
+    <p-floatlabel>
+      <input
+        class="w-full"
+        pInputText
+        formControlName="password"/>
+      <label >Mot de passe</label>
+    </p-floatlabel>
+
+    <p-floatlabel>
+      <p-select [options]="roles"
+                optionLabel="label"
+                formControlName="role"
+                class="w-full" />
+      <label >Role</label>
+    </p-floatlabel>
+  </div>
+  <div>
+    <div class="flex justify-between mt-10">
+      <div class="flex flex-row items-center">
+        <p-progress-spinner
+          *ngIf="loading"
+          [style]="{ width: '30px', height: '30px'}"
+          aria-label="Loading"
+          fill="transparent"
+          strokeWidth="5">
+        </p-progress-spinner>
+      </div>
+      <div class="flex flex-row">
+        <span (click)="save()" class="block px-5 py-2 border border-blue-500 text-blue-500 rounded-sm cursor-pointer mr-5">Annuler</span>
+        <span (click)="save()" class="block px-5 py-2 bg-blue-500 text-white rounded-sm cursor-pointer">Sauvegarder</span>
+      </div>
+    </div>
+  </div>
+</form>
+
+

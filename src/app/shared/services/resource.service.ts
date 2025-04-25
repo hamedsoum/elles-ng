@@ -12,6 +12,7 @@ export abstract class EDOResourceService<D, C> implements BaseUseCase<D, C> {
   private readonly resourceURLIndex: string
   protected constructor(resourceURLIndex: string) {
  this.resourceURLIndex = resourceURLIndex;
+    console.log(this.resourceURLIndex)
   }
 
   findAll(): Observable<D[]> {
@@ -27,7 +28,7 @@ export abstract class EDOResourceService<D, C> implements BaseUseCase<D, C> {
   }
 
   private buildEndpoint(endpoint?: string): string {
-    if (Utils.isNull(endpoint)) return environment.apiBaseUrl + '/' + this.buildEndpoint(endpoint);
-    else return (environment.apiBaseUrl + '/' + this.resourceURLIndex + '/' + endpoint);
+    if (!Utils.isNull(endpoint)) return environment.apiBaseUrl + '/' + endpoint;
+    else return (environment.apiBaseUrl + '/' + this.resourceURLIndex);
   }
 }
