@@ -14,7 +14,6 @@ import {
   InputMultipleSelectComponent
 } from '../../../shared/components/input/multiple-select/input-multiple-select.component';
 import {VehicleCategory} from '../../../core/domain/vehicle';
-import {FloatLabel} from 'primeng/floatlabel';
 
 @Component({
   selector: 'product-form',

@@ -28,7 +28,6 @@ export abstract class InputComponent<V> implements ControlValueAccessor, Validat
 
   get errorMessage(): string | null {
     if (Utils.isNull(this.control)) return null;
-
     for (const validatorKey in this.control!.errors) {
 
       if (this.control!.dirty || this.control!.touched) {
@@ -87,6 +86,7 @@ export abstract class InputComponent<V> implements ControlValueAccessor, Validat
     if (Utils.isNull(event)) this.valueChange.emit(undefined);
     else {
       this.value = event;
+      this.control.setValue(this.value);
       this.valueChange.emit(this.value);
       this.onChange(event);
     }

@@ -7,6 +7,7 @@ import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {PrimeTemplate} from 'primeng/api';
 import {ProductFormComponent} from '../product/form/product-form.component';
 import {TableModule} from 'primeng/table';
+import {SubscriptionFormComponent} from './form/subscription-form.component';
 
 @Component({
   selector: 'subscriptions',
@@ -14,9 +15,9 @@ import {TableModule} from 'primeng/table';
     Dialog,
     NgIf,
     PrimeTemplate,
-    ProductFormComponent,
     TableModule,
-    DatePipe
+    DatePipe,
+    SubscriptionFormComponent
   ],
   templateUrl: './subscriptions.component.html'
 })

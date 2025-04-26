@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from '../../core/domain/user';
-import {UserService} from '../../shared/services/user.service';
 import {finalize} from 'rxjs';
 import {Product} from '../../core/domain/product';
 import {ProductService} from '../../shared/services/product.service';
@@ -8,7 +6,6 @@ import {Dialog} from 'primeng/dialog';
 import {NgForOf, NgIf} from '@angular/common';
 import {PrimeTemplate} from 'primeng/api';
 import {TableModule} from 'primeng/table';
-import {UserFormComponent} from '../user/form/user-form.component';
 import {ProductFormComponent} from './form/product-form.component';
 
 @Component({

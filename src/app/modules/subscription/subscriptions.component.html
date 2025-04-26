@@ -45,13 +45,13 @@
 <p-dialog
   [(visible)]="formVisible"
   [modal]="true"
-  [style]="{ width: '50rem', height: '25rem' }"
-  header="Nouveau produit">
+  [style]="{ width: '60rem', height: '54rem' }"
+  header="Nouvelle souscription">
   <ng-template pTemplate="content">
-    <product-form
+    <subscription-form
       (cancelEvent)="formVisible = false"
       (saveEvent)="handleSaveEvent()"
     >
-    </product-form>
+    </subscription-form>
   </ng-template>
 </p-dialog>

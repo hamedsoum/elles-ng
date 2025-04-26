@@ -1,54 +1,196 @@
-<form [formGroup]="formGroup" [ngClass]="{'disabled': loading}">
-
-  <p-stepper [value]="1" class="basis-[50rem]">
+<p-stepper [value]="activeIndex" class="basis-[50rem]">
     <p-step-list>
-      <p-step [value]="1">Header I</p-step>
-      <p-step [value]="2">Header II</p-step>
-      <p-step [value]="3">Header II</p-step>
+      <p-step [value]="1">Information Véhicule</p-step>
+      <p-step [value]="2">Information Produit & Souscripteur</p-step>
+      <p-step [value]="3"> Récapitulatif et validation</p-step>
     </p-step-list>
     <p-step-panels>
       <p-step-panel [value]="1">
         <ng-template #content let-activateCallback="activateCallback">
-          <div class="flex flex-col h-48">
-            <div
-              class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
-            >
-              Content I
+          <form
+            class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium p-3"
+            [formGroup]="vehicleFormGroup" [ngClass]="{'disabled': loading}">
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-4 gap-y-8 py-10">
+              <input-date
+                class="h-15"
+                formControlName="vehicleFirstRegistrationDate"
+                label="Date de première mise en circulation">
+              </input-date>
+              <input-text
+                class="h-15"
+                formControlName="licenceNumber"
+                label="Numéro d'immatriculation">
+              </input-text>
+              <input-text
+                class="h-15"
+                formControlName="color"
+                label="Couleur">
+              </input-text>
+              <input-text
+                class="h-15"
+                type="number"
+                formControlName="numberOfSeat"
+                label="Nombre de sièges">
+              </input-text>
+              <input-text
+                class="h-15"
+                type="number"
+                formControlName="numberOfDoor"
+                label="Nombre de portes">
+              </input-text>
+              <input-select
+                class="h-15"
+                [items]="eligibleVehicles"
+                formControlName="category"
+                label="Catégorie de véhicule">
+              </input-select>
             </div>
+          </form>
             <div class="flex pt-6 justify-end">
-              <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(2)" />
+              <p-button label="Suivant" icon="pi pi-arrow-right" iconPos="right" (onClick)="goToStepInsured()" />
             </div>
-          </div>
         </ng-template>
       </p-step-panel>
 
       <p-step-panel [value]="2">
         <ng-template #content let-activateCallback="activateCallback">
-          <div class="flex flex-col h-48">
-            <div
-              class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
-            >
-              Content II
+          <form
+            class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium p-3"
+            [formGroup]="insuredFormGroup" [ngClass]="{'disabled': loading}">
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-4 gap-y-8 py-10">
+              <input-select
+                class="h-15"
+                [items]="products"
+                formControlName="product"
+                label="Produit d'assurance">
+              </input-select>
+              <input-text
+                class="h-15"
+                formControlName="firstName"
+                label="Prénom(s)">
+              </input-text>
+              <input-text
+                class="h-15"
+                formControlName="lastName"
+                label="Nom">
+              </input-text>
+              <input-text
+                class="h-15"
+                formControlName="identityNumber"
+                label="Numéro CNI">
+              </input-text>
+              <input-text
+                class="h-15"
+                formControlName="city"
+                label="Ville">
+              </input-text>
+              <input-text
+                class="h-15"
+                formControlName="address"
+                label="Adresse">
+              </input-text>
             </div>
-          </div>
+          </form>
+
           <div class="flex pt-6 justify-between">
-            <p-button label="Back" severity="secondary" icon="pi pi-arrow-left" (onClick)="activateCallback(1)" />
-            <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(3)" />
+            <p-button label="Back" severity="secondary" icon="pi pi-arrow-left" (onClick)="goToStepVehicle()" />
+            <p-button label="Suivant" icon="pi pi-arrow-right" iconPos="right" (onClick)="goToStepRecap()" />
           </div>
         </ng-template>
       </p-step-panel>
 
       <p-step-panel [value]="3">
         <ng-template #content let-activateCallback="activateCallback">
-          <div class="flex flex-col h-48">
-            <div
-              class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
-            >
-              Content III
+          <div class="flex flex-col justify-between">
+            <div class="flex flex-col">
+              <div>
+                <span class="block text-md text-blue-500 font-bold">Information véhicule</span>
+                <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-4 gap-y-8 mt-5">
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Date de première mise en circulation',
+                   data: vehicle?.vehicleFirstRegistrationDate
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Numéro d\'immatriculation',
+                   data: vehicle?.licenceNumber
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Couleur',
+                   data: vehicle?.color
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Nombre de sièges',
+                   data: vehicle?.numberOfSeat
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Nombre de porte',
+                   data: vehicle?.numberOfDoor
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Catégorie de véhicule',
+                   data: category?.label
+                   }">
+                  </div>
+                </div>
+              </div>
+              <div class="mt-15">
+                <span class="block text-md text-blue-500 font-bold">Information Produit & Souscripteur</span>
+                <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-4 gap-y-8 mt-5">
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Produit souscrit',
+                   data: product?.label
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Prénom(s)',
+                   data: insured?.firstName
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Nom',
+                   data: insured?.lastName
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Numéro de carte d\'identité',
+                   data: insured?.identityNumber
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Ville',
+                   data: insured?.city
+                   }">
+                  </div>
+                  <div *ngTemplateOutlet="dataField;
+                   context: {
+                   label: 'Adresse',
+                   data: insured?.address
+                   }">
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="flex pt-6 justify-start">
-            <p-button label="Back" icon="pi pi-arrow-left" iconPos="right" (onClick)="activateCallback(2)" />
+
+            <div class="flex pt-10 justify-between">
+              <p-button label="Retour" severity="secondary" icon="pi pi-arrow-left" (onClick)="goToStepInsured()" />
+              <p-button label="Valider" icon="pi pi-arrow-check" iconPos="right" (onClick)="save()" />
+            </div>
           </div>
         </ng-template>
       </p-step-panel>
@@ -64,11 +206,14 @@
           strokeWidth="5">
         </p-progress-spinner>
       </div>
-      <div class="flex flex-row">
-        <span (click)="cancelEvent.emit()" class="block px-5 py-2 border border-blue-500 text-blue-500 rounded-sm cursor-pointer mr-5">Annuler</span>
-        <span (click)="save()" class="block px-5 py-2 bg-blue-500 text-white rounded-sm cursor-pointer">Sauvegarder</span>
-      </div>
     </div>
-</form>
+
+
+<ng-template #dataField let-label="label" let-data="data">
+  <div class="flex flex-col">
+    <span class="text-gray-500">{{label}}</span>
+    <span class="mt-1 font-bold">{{data}}</span>
+  </div>
+</ng-template>
 
 

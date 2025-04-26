@@ -1,19 +1,16 @@
+import {Insured} from './insured';
+import {Vehicle} from './vehicle';
 
 export interface Subscription {
-
-  id: string,
+  id?: string,
   productID: string,
-  insured: {
-
-},
-  vehicle: {
-
-},
+  insured: Insured,
+  vehicle: Vehicle,
   status: SubscriptionStatus,
   createdAt: string,
   createdBy: string,
-  updatedAt: string,
-  updatedBy: string
+  updatedAt?: string,
+  updatedBy?: string
 }
 
 export enum SubscriptionStatus {

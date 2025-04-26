@@ -1,21 +1,27 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {TableModule} from 'primeng/table';
 import {finalize} from 'rxjs';
-import {NgClass, NgIf} from '@angular/common';
-import { MultiSelectModule } from 'primeng/multiselect';
+import {NgClass, NgIf, NgTemplateOutlet} from '@angular/common';
+import {MultiSelectModule} from 'primeng/multiselect';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
+import {InputTextModule} from 'primeng/inputtext';
 import {ProgressSpinner} from 'primeng/progressspinner';
-import { SelectModule } from 'primeng/select';
-import {InputTextComponent} from '../../../shared/components/input/text/input-text.component';
+import {SelectModule} from 'primeng/select';
 import {ProductService} from '../../../shared/services/product.service';
-import {Product, Warranty} from '../../../core/domain/product';
+import {Vehicle, VehicleCategory} from '../../../core/domain/vehicle';
+import {StepperModule} from 'primeng/stepper';
+import {Button} from 'primeng/button';
+import {InputSelectComponent} from '../../../shared/components/input/select/input-select.component';
+import {InputTextComponent} from '../../../shared/components/input/text/input-text.component';
 import {
   InputMultipleSelectComponent
 } from '../../../shared/components/input/multiple-select/input-multiple-select.component';
-import {VehicleCategory} from '../../../core/domain/vehicle';
-import { StepperModule } from 'primeng/stepper';
-import {Button} from 'primeng/button';
+import {DatePickerModule} from 'primeng/datepicker';
+import {InputDateComponent} from '../../../shared/components/input/date/input-date.component';
+import {Subscription, SubscriptionStatus} from '../../../core/domain/subscription';
+import {AuthenticationService} from '../../../shared/services/authentication.service';
+import {SubscriptionService} from '../../../shared/services/subscription.service';
+import {Insured} from '../../../core/domain/insured';
 
 @Component({
   selector: 'subscription-form',
@@ -32,25 +38,37 @@ import {Button} from 'primeng/button';
     StepperModule,
     MultiSelectModule,
     Button,
+    InputSelectComponent,
+    InputTextComponent,
+    DatePickerModule,
+    NgTemplateOutlet,
+    InputDateComponent,
   ]
 })
-export class SubscriptionFormComponent implements OnInit {
+export class SubscriptionFormComponent implements OnInit, AfterViewInit {
+
+  @Output() cancelEvent = new EventEmitter();
+  @Output() saveEvent = new EventEmitter<Subscription>();
+
+  @ViewChild('content') stepperContentRef!: TemplateRef<any>;
 
   loading?: boolean;
 
-  formGroup!: FormGroup;
+  insuredFormGroup!: FormGroup;
+  vehicleFormGroup!: FormGroup;
 
   error?: any;
+  errorSubscription?: any;
 
-  warranties = [
-    { value: Warranty.COLLISION, label: 'COLLISION' },
-    { value: Warranty.TIERCE_COLLISION, label: 'TIERCE COLLISION' },
-    { value: Warranty.DOMMAGE, label: 'DOMMAGE' },
-    { value: Warranty.RC, label: 'RC' },
-    { value: Warranty.VOL, label: 'VOL' },
-    { value: Warranty.INCENDIE, label: 'INCENDIE' },
-    { value: Warranty.All, label: 'Toutes garanties ' },
-  ]
+  insured?: Insured;
+  vehicle?: Vehicle;
+  category?: { label: string, value: any };
+  product?: { label: string, value: any };
+  products?: { label: string, value: any }[];
+
+  saveData?: Subscription;
+
+  activeIndex: number = 1;
 
   eligibleVehicles = [
     { value: VehicleCategory.CATEGORY_201, label: 'Usage personnel' },
@@ -59,39 +77,63 @@ export class SubscriptionFormComponent implements OnInit {
     { value: VehicleCategory.CATEGORY_204, label: 'Taxis' }
   ]
 
-  @Output() cancelEvent = new EventEmitter();
-  @Output() saveEvent = new EventEmitter<Product>();
-
   constructor(
-
+    private formBuilder: FormBuilder,
     private productService: ProductService,
-    private formBuilder: FormBuilder
+    private subscriptionService: SubscriptionService,
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit(): void {
-    this.buildFields();
+    this.findProducts();
+    this.buildInsuredFields();
+    this.buildVehicleFields();
+  }
+
+  ngAfterViewInit(): void {
+    console.log(this.stepperContentRef);
+  }
+
+  goToStepInsured() {
+    this.vehicleFormGroup.markAllAsTouched();
+    if (this.vehicleFormGroup.valid) {
+      this.activeIndex = 2;
+    }
+  }
+
+  goToStepVehicle() {
+    this.activeIndex = 1;
+  }
+
+  goToStepRecap() {
+    this.insuredFormGroup.markAllAsTouched();
+    if (this.insuredFormGroup.valid) {
+
+      this.insured = this.insuredFormGroup.value;
+      this.vehicle = this.vehicleFormGroup.value;
+      console.log("insuredFormGroup ==>", this.insuredFormGroup);
+      console.log("vehicleFormGroup ==>", this.vehicleFormGroup);
+
+      this.product = this.insuredFormGroup.get('product')?.value;
+      this.category = this.vehicleFormGroup.get('category')?.value
+      this.buildSaveData();
+      this.activeIndex = 3;
+    }
   }
 
   public save(): void {
-    this.formGroup.markAllAsTouched();
-    if (this.formGroup.valid) {
-      this.loading = true;
-      let formData = this.formGroup.value;
-      console.log(formData);
-      formData = {
-        ...formData,
-        warranties: formData.warranties.map((el: any) => el.value),
-        eligibleVehicles: formData.eligibleVehicles.map((el: any) => el.value)
-      }
+    this.insuredFormGroup.markAllAsTouched();
+    if (this.insuredFormGroup.valid) {
+      this.buildSaveData();
+      console.log("Save data ===>", this.saveData);
 
-      console.log(formData)
-      this.productService.save(formData)
+      this.subscriptionService.save(this.saveData!)
         .pipe(finalize(() => this.loading = false))
         .subscribe(
           {
-            next: userSaved => {
-              this.formGroup.reset();
-              this.saveEvent.emit(userSaved);
+            next: subscriptionCreated => {
+              this.insuredFormGroup.reset();
+              this.saveEvent.emit(subscriptionCreated);
             },
             error: error => this.error = error
           }
@@ -99,11 +141,54 @@ export class SubscriptionFormComponent implements OnInit {
     }
   }
 
-  private buildFields(): void {
-    this.formGroup = this.formBuilder.group({
-      name: ['', Validators.required],
-      warranties: ['' , Validators.required],
-      eligibleVehicles: ['', Validators.required],
+  private buildInsuredFields(): void {
+    this.insuredFormGroup = this.formBuilder.group({
+      product: ['', [Validators.required]],
+      firstName: ['', Validators.required],
+      lastName: ['' , Validators.required],
+      identityNumber: ['', Validators.required],
+      city: ['', Validators.required],
+      address: ['', Validators.required],
     })
+  }
+
+  private buildVehicleFields(): void {
+    this.vehicleFormGroup = this.formBuilder.group({
+      vehicleFirstRegistrationDate: ['', Validators.required],
+      licenceNumber: ['' , Validators.required],
+      color: ['', Validators.required],
+      numberOfSeat: ['', Validators.required],
+      numberOfDoor: ['', Validators.required],
+      category: ['', Validators.required],
+    })
+  }
+
+  private findProducts(): void {
+    this.productService.findAll().subscribe(
+      {
+        next: products => {
+          this.products = products.map((product) => ({value: product.id, label: product.name}));
+        },
+        error: error => this.error = error
+      }
+    )
+  }
+
+  private buildSaveData(): void {
+    const formDataVehicle = this.vehicleFormGroup.value;
+    const formDataInsured = this.insuredFormGroup.value;
+
+    this.saveData = {
+      productID: formDataInsured.product.value,
+      insured: formDataInsured,
+      vehicle: {
+        ...formDataVehicle,
+        category: formDataVehicle.category.value,
+        vehicleFirstRegistrationDate: new Date(formDataVehicle.vehicleFirstRegistrationDate).toISOString(),
+      },
+      status: SubscriptionStatus.DRAFT,
+      createdBy: this.authenticationService.getUser()!.id,
+      createdAt: new Date().toISOString(),
+    }
   }
 }

@@ -1,0 +1,20 @@
+<div [ngClass]="{'disabled': disabled}" class="w-full {{styleClass}}">
+  <p-floatlabel>
+    <p-datepicker
+      (blur)="markAsTouched()"
+      (ngModelChange)="onInput($event)"
+      [(ngModel)]="value"
+      dateFormat="dd/mm/yy"
+      dataType="string"
+      [disabled]="disabled"
+      styleClass="w-full {{inputStyleClass}}"
+      [placeholder]=" (placeholder | edoIsNotEmpty) ? placeholder! : ''"
+      class="w-full {{styleClass}}"
+      />
+    <label >{{ label }}</label>
+  </p-floatlabel>
+  <div class="flex-row height10">
+    <span *ngIf="errorMessage | edoIsNotEmpty" class="input-field-error-message"> {{ errorMessage }} </span>
+  </div>
+</div>
+

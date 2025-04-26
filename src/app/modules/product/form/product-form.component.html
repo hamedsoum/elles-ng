@@ -1,22 +1,19 @@
-<form [formGroup]="formGroup" [ngClass]="{'disabled': loading}">
-  <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-4 gap-y-8 py-10">
-    <input-text
-      class="h-15"
-      formControlName="name"
-      label="Nom">
-    </input-text>
+<form [formGroup]="formGroup" [ngClass]="{'disabled': loading}" class="flex flex-col h-full flex-">
+  <div class="w-full h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-4 py-10">
     <input-multiple-select
-      class="h-15"
       [items]="warranties"
       formControlName="warranties"
       label="Garranties">
     </input-multiple-select>
     <input-multiple-select
-      class="h-15"
       [items]="eligibleVehicles"
       formControlName="eligibleVehicles"
       label="Voitures elligibles">
     </input-multiple-select>
+    <input-text
+      formControlName="name"
+      label="Nom">
+    </input-text>
   </div>
   <div>
     <div class="flex justify-between mt-5">
