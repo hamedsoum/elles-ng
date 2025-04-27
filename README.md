@@ -1,13 +1,9 @@
- Installation rapide du projet
- 
-Prérequis
+# Installation du projet
+
+# Prérequis
 Node.js 20.x
-
 npm 10+
-
 Angular CLI 19.x
-
-Installation
 
 # Installer Angular CLI
 npm install -g @angular/cli@^19
