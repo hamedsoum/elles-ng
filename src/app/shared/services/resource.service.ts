@@ -12,7 +12,6 @@ export abstract class EDOResourceService<D, C> implements BaseUseCase<D, C> {
   private readonly resourceURLIndex: string
   protected constructor(resourceURLIndex: string) {
  this.resourceURLIndex = resourceURLIndex;
-    console.log(this.resourceURLIndex)
   }
 
   findAll(): Observable<D[]> {

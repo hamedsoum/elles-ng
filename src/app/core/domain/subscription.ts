@@ -13,6 +13,19 @@ export interface Subscription {
   updatedBy?: string
 }
 
+export interface SubscriptionResponse {
+  id: string;
+  productName: string,
+  insuredFirstName: string,
+  insuredLastName: string,
+  phoneNumber: string,
+  identityNumber: string,
+  vehicleCategory: string,
+  licenceNumber: string,
+  vehicleFirstRegistrationDate: string,
+  status: string
+}
+
 export enum SubscriptionStatus {
   DRAFT  = "DRAFT",
   VALIDATED = "VALIDATED",

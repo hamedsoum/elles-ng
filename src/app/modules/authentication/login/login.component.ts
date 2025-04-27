@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit {
         .subscribe(
           {
             next: response => {
-              console.log(response);
               this.authenticationService.setToken(response.token);
               this.authenticationService.setUser(response.user);
               if (this.authenticationService.isAuthenticated()) this.router.navigate(['main']);

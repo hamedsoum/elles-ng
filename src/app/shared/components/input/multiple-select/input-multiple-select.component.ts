@@ -42,6 +42,5 @@ export class InputMultipleSelectComponent extends InputComponent<any[]> implemen
   }
 
   public onClear(event: Event): void {
-    console.log(event)
   }
 }

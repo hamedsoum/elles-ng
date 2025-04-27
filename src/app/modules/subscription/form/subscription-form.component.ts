@@ -18,7 +18,7 @@ import {
 } from '../../../shared/components/input/multiple-select/input-multiple-select.component';
 import {DatePickerModule} from 'primeng/datepicker';
 import {InputDateComponent} from '../../../shared/components/input/date/input-date.component';
-import {Subscription, SubscriptionStatus} from '../../../core/domain/subscription';
+import {Subscription, SubscriptionResponse, SubscriptionStatus} from '../../../core/domain/subscription';
 import {AuthenticationService} from '../../../shared/services/authentication.service';
 import {SubscriptionService} from '../../../shared/services/subscription.service';
 import {Insured} from '../../../core/domain/insured';
@@ -45,10 +45,10 @@ import {Insured} from '../../../core/domain/insured';
     InputDateComponent,
   ]
 })
-export class SubscriptionFormComponent implements OnInit, AfterViewInit {
+export class SubscriptionFormComponent implements OnInit {
 
   @Output() cancelEvent = new EventEmitter();
-  @Output() saveEvent = new EventEmitter<Subscription>();
+  @Output() saveEvent = new EventEmitter<SubscriptionResponse>();
 
   @ViewChild('content') stepperContentRef!: TemplateRef<any>;
 
@@ -90,10 +90,6 @@ export class SubscriptionFormComponent implements OnInit, AfterViewInit {
     this.buildVehicleFields();
   }
 
-  ngAfterViewInit(): void {
-    console.log(this.stepperContentRef);
-  }
-
   goToStepInsured() {
     this.vehicleFormGroup.markAllAsTouched();
     if (this.vehicleFormGroup.valid) {
@@ -111,8 +107,6 @@ export class SubscriptionFormComponent implements OnInit, AfterViewInit {
 
       this.insured = this.insuredFormGroup.value;
       this.vehicle = this.vehicleFormGroup.value;
-      console.log("insuredFormGroup ==>", this.insuredFormGroup);
-      console.log("vehicleFormGroup ==>", this.vehicleFormGroup);
 
       this.product = this.insuredFormGroup.get('product')?.value;
       this.category = this.vehicleFormGroup.get('category')?.value
@@ -125,8 +119,6 @@ export class SubscriptionFormComponent implements OnInit, AfterViewInit {
     this.insuredFormGroup.markAllAsTouched();
     if (this.insuredFormGroup.valid) {
       this.buildSaveData();
-      console.log("Save data ===>", this.saveData);
-
       this.subscriptionService.save(this.saveData!)
         .pipe(finalize(() => this.loading = false))
         .subscribe(
@@ -146,6 +138,7 @@ export class SubscriptionFormComponent implements OnInit, AfterViewInit {
       product: ['', [Validators.required]],
       firstName: ['', Validators.required],
       lastName: ['' , Validators.required],
+      phoneNumber: ['' , Validators.required],
       identityNumber: ['', Validators.required],
       city: ['', Validators.required],
       address: ['', Validators.required],
@@ -184,7 +177,7 @@ export class SubscriptionFormComponent implements OnInit, AfterViewInit {
       vehicle: {
         ...formDataVehicle,
         category: formDataVehicle.category.value,
-        vehicleFirstRegistrationDate: new Date(formDataVehicle.vehicleFirstRegistrationDate).toISOString(),
+        vehicleFirstRegistrationDate: new Date(formDataVehicle.vehicleFirstRegistrationDate),
       },
       status: SubscriptionStatus.DRAFT,
       createdBy: this.authenticationService.getUser()!.id,

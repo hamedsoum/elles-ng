@@ -4,9 +4,11 @@ import {Product} from '../../core/domain/product';
 import {ProductService} from '../../shared/services/product.service';
 import {Dialog} from 'primeng/dialog';
 import {NgForOf, NgIf} from '@angular/common';
-import {PrimeTemplate} from 'primeng/api';
+import {MessageService, PrimeTemplate} from 'primeng/api';
 import {TableModule} from 'primeng/table';
 import {ProductFormComponent} from './form/product-form.component';
+import {Toast} from 'primeng/toast';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'products',
@@ -15,10 +17,13 @@ import {ProductFormComponent} from './form/product-form.component';
     NgIf,
     PrimeTemplate,
     TableModule,
+    ToastModule,
     NgForOf,
-    ProductFormComponent
+    ProductFormComponent,
+    Toast
   ],
-  templateUrl: './products.component.html'
+  templateUrl: './products.component.html',
+  providers: [MessageService]
 })
 export class ProductsComponent implements OnInit {
 
@@ -28,16 +33,21 @@ export class ProductsComponent implements OnInit {
 
   formVisible: boolean = false;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private messageService: MessageService,
+    private productService: ProductService
+  ) {}
 
   ngOnInit(): void {
     this.findAll();
   }
 
-  public handleSaveEvent(): void {
+  public handleSaveEvent(product: Product): void {
     this.formVisible = false;
+    this.messageService.add({ severity: 'success', summary: product.name, detail: 'Produit ajouté avec succès'});
     this.findAll();
   }
+
   private findAll(): void {
     this.loading = true
     this.productService.findAll()
@@ -45,7 +55,6 @@ export class ProductsComponent implements OnInit {
       .subscribe(
         (products: Product[]) => {
           this.products = products;
-          console.log("Products ===>", this.products);
         },
         error => console.log(error)
       )

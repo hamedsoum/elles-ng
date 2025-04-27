@@ -10,31 +10,39 @@
     *ngIf="subscriptions"
     [loading]="loading"
     [value]="subscriptions!"
+    styleClass="shadow-xl"
     [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template #header>
       <tr>
         <th>Produit</th>
         <th>Nom du souscripteur</th>
+        <th>Numéro de tél du souscripteur</th>
         <th>Numéro de CNI</th>
         <th>Type de vehicule</th>
         <th>Matricule du vehicule</th>
         <th>Date venal du vehicule</th>
+        <th>Status</th>
       </tr>
     </ng-template>
     <ng-template #body let-subscription>
       <tr>
-        <td></td>
-        <td>{{subscription.insured.firstName}} {{subscription.insured.lastName}}</td>
-        <td>{{subscription.insured.identityNumber}}</td>
-        <td>{{subscription.vehicle.category}}</td>
-        <td>{{subscription.vehicle.licenceNumber}}</td>
-        <td>{{subscription.vehicle.vehicleFirstRegistrationDate | date }}</td>
+        <td>{{subscription.productName}}</td>
+        <td>{{subscription.insuredFirstName}} {{subscription.insuredLastName}}</td>
+        <td>{{subscription.phoneNumber}}</td>
+        <td>{{subscription.identityNumber}}</td>
+        <td>{{subscription.vehicleCategory}}</td>
+        <td>{{subscription.licenceNumber}}</td>
+        <td>{{subscription.vehicleFirstRegistrationDate | date }}</td>
+        <td>
+          <p-tag [severity]="buildStatus(subscription.status).severity"
+                 [value]="buildStatus(subscription.status).label"/>
+        </td>
       </tr>
     </ng-template>
     <ng-template #emptymessage>
-      <td colspan="4">
+      <td colspan="6">
         <div class="h-[20rem] flex flex-row justify-center items-center">
-          <span>Aucun produit trouvé !</span>
+          <span>Aucune souscription trouvé !</span>
         </div>
       </td>
     </ng-template>
@@ -42,6 +50,7 @@
   </p-table>
 </div>
 
+<p-toast />
 <p-dialog
   [(visible)]="formVisible"
   [modal]="true"
@@ -50,7 +59,7 @@
   <ng-template pTemplate="content">
     <subscription-form
       (cancelEvent)="formVisible = false"
-      (saveEvent)="handleSaveEvent()"
+      (saveEvent)="handleSaveEvent($event)"
     >
     </subscription-form>
   </ng-template>

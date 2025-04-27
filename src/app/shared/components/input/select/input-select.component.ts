@@ -41,6 +41,5 @@ export class InputSelectComponent extends InputComponent<any[]> implements OnIni
   }
 
   public onClear(event: Event): void {
-    console.log(event)
   }
 }

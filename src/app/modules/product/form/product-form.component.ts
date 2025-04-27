@@ -75,14 +75,12 @@ export class ProductFormComponent implements OnInit {
     if (this.formGroup.valid) {
       this.loading = true;
       let formData = this.formGroup.value;
-      console.log(formData);
       formData = {
         ...formData,
         warranties: formData.warranties.map((el: any) => el.value),
         eligibleVehicles: formData.eligibleVehicles.map((el: any) => el.value)
       }
 
-      console.log(formData)
       this.productService.save(formData)
         .pipe(finalize(() => this.loading = false))
         .subscribe(

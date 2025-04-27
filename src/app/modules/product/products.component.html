@@ -10,6 +10,7 @@
     *ngIf="products"
     [loading]="loading"
     [value]="products!"
+    styleClass="shadow-xl"
     [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template #header>
       <tr>
@@ -40,6 +41,7 @@
   </p-table>
 </div>
 
+<p-toast />
 <p-dialog
   [(visible)]="formVisible"
   [modal]="true"
@@ -48,7 +50,7 @@
   <ng-template pTemplate="content">
     <product-form
       (cancelEvent)="formVisible = false"
-      (saveEvent)="handleSaveEvent()"
+      (saveEvent)="handleSaveEvent($event)"
     >
     </product-form>
   </ng-template>

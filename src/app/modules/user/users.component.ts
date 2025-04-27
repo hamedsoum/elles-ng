@@ -6,12 +6,15 @@ import {finalize} from 'rxjs';
 import {NgIf} from '@angular/common';
 import {Dialog} from 'primeng/dialog';
 import {UserFormComponent} from './form/user-form.component';
+import {MessageService} from 'primeng/api';
+import {ToastModule} from 'primeng/toast';
 
 @Component({
   selector: 'users',
   templateUrl: './users.component.html',
-
+  providers: [MessageService],
   imports: [
+    ToastModule,
     TableModule,
     NgIf,
     Dialog,
@@ -26,14 +29,18 @@ export class UsersComponent implements OnInit {
 
   formVisible: boolean = false;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private messageService: MessageService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.findAll();
   }
 
-  public handleSaveEvent(): void {
+  public handleSaveEvent(user:User): void {
     this.formVisible = false;
+    this.messageService.add({ severity: 'success', summary: `Utilisateur ajouté avec succès `, detail: `${user.firstName} ${user.lastName} - ${user.role}`});
     this.findAll();
   }
   private findAll(): void {

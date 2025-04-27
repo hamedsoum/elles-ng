@@ -4,12 +4,13 @@
   </div>
 
   <div class="flex justify-end my-10">
-    <span (click)="formVisible = true" class="block px-5 py-2 bg-blue-500 text-white rounded-sm cursor-pointer">Nouvel utilsateur</span>
+    <span (click)="formVisible = true" class="block shadow-2xl px-5 py-2 bg-blue-500 text-white rounded-sm cursor-pointer">Nouvel utilsateur</span>
   </div>
   <p-table
     *ngIf="users"
     [loading]="loading"
     [value]="users!"
+    styleClass="shadow-2xl"
     [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template #header>
       <tr>
@@ -40,6 +41,7 @@
   </p-table>
 </div>
 
+<p-toast />
 <p-dialog
   [(visible)]="formVisible"
   [modal]="true"
@@ -48,7 +50,7 @@
   <ng-template pTemplate="content">
     <user-form
       (cancelEvent)="formVisible = false"
-      (saveEvent)="handleSaveEvent()"
+      (saveEvent)="handleSaveEvent($event)"
     >
     </user-form>
     </ng-template>
